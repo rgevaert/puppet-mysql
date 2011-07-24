@@ -16,5 +16,17 @@ class mysql::config
       owner   => mysql,
       group   => mysql,
       mode    => 700;
+    "/etc/mysql/my.cnf":
+      ensure  => present,
+      owner   => root,
+      group   => root,
+      mode    => 644,
+      source  => [ "puppet:///modules/mysql/my.cnf-$hostname", "puppet:///modules/mysql/my.cnf-$type" ],
+      notify  => Class["service"],
+    "/etc/mysql/debian.cnf":
+      ensure  => present,
+      owner   => root,
+      group   => root,
+      mode    => 600,
   }
 }
