@@ -8,6 +8,12 @@ class mysql::params
     'mariadb' => [ 'mariadb-server-5.3' ],
   } 
 
+  $packages_extra = $type ? {
+    'oracle'  => [ 'maatkit' ],
+    'percona' => [ 'maatkit', 'xtrabackup' ],
+    'mariadb' => [ 'maatkit'],
+  } 
+
   $service = $type ? {
     'oracle'  => [ 'mysql' ],
     'percona' => [ 'mysql' ],
