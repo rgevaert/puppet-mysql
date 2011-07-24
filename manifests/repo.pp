@@ -7,18 +7,20 @@ class mysql::repo
     }
 
     'percona': {
-      apt::key {"1C4CBDCDCD2EFD2A":
+      apt::key {
+        'CD2EFD2A':
       }
 
       apt::sources_list {"percona":
           ensure  => present,
           content => "deb http://repo.percona.com/apt $lsbdistcodename main",
-          require => Apt::Key['1C4CBDCDCD2EFD2A'],
+          require => Apt::Key['CD2EFD2A'],
       }
     }
 
     'mariadb': { 
-      apt::key {"1BB943DB":
+      apt::key {
+        '1BB943DB':
       }
 
       apt::sources_list {"mariadb5.3":
