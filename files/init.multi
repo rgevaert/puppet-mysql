@@ -1,0 +1,31 @@
+#!/bin/bash
+
+. /lib/lsb/init-functions
+
+case "${1:-''}" in
+  'start')
+    log_daemon_msg "Starting MySQL Multi " "mysqld_multi $2" 
+    mysqld_multi start $2
+    echo
+    ;;
+
+  'stop')
+    log_daemon_msg "Stopping MySQL Multi" "mysqld_multi $2"
+    mysqld_multi stop $2
+    echo
+    ;;
+
+  'report' )
+    mysqld_multi report $2
+    ;;
+
+  'restart' )
+    mysqld_multi stop $2
+    mysqld_multi start $2
+    ;;
+
+  *)
+    echo "Usage: $SELF start|stop|restart"
+    exit 1
+    ;;
+esac
