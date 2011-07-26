@@ -1,6 +1,6 @@
 class mysql::params
 {
-  notice("type: $type")
+  include pwgen
 
   $packages = $type ? {
     'oracle'  => [ 'mysql-server-5.1' ],
@@ -19,4 +19,10 @@ class mysql::params
     'percona' => [ 'mysql' ],
     'mariadb' => [ 'mysql' ],
   } 
+
+  $password = $fqdn ? {
+    'myhost1.example.com'  => 'test123',
+    default                => pwgen(),
+  }
+  
 }

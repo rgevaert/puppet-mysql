@@ -9,3 +9,4 @@ project_page 'UNKNOWN'
 
 ## Add dependencies, if any:
 dependency 'camptocamp/apt', '>= 0.0.1'
+dependency 'rgevaert/pwgen', '>= 0.0.1'
