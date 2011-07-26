@@ -16,7 +16,7 @@
 #    type => mariadb
 # }
 #
-class mysql ( $type='oracle')
+class mysql ( $type='oracle', $multi=false)
 {
   include mysql::params
   include mysql::repo
