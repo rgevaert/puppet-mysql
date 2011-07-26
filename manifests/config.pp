@@ -21,7 +21,7 @@ class mysql::config
       owner   => root,
       group   => root,
       mode    => 644,
-      source  => [ "puppet:///modules/mysql/my.cnf-${fqdn}", "puppet:///modules/mysql/my.cnf-${type}" ],
+      source  => [ "puppet:///modules/mysql/my.cnf-${hostname}", "puppet:///modules/mysql/my.cnf-${type}" ],
       notify  => Class["mysql::service"];
     "/etc/mysql/debian.cnf":
       ensure  => present,
