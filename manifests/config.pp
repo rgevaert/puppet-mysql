@@ -27,6 +27,12 @@ class mysql::config
       ensure  => present,
       owner   => root,
       group   => root,
-      mode    => 600,
+      mode    => 600;
+    "/etc/init.d/mysql":
+      ensure  => present,
+      owner   => root,
+      group   => root,
+      mode    => 755,
+      source  => $mysql::params::initscript;
   }
 }

@@ -25,4 +25,8 @@ class mysql::params
     default                => pwgen(),
   }
   
+  $initscript = $multi ? {
+    true   => 'puppet:///modules/mysql/init.multi',
+    false =>  undef,
+  }
 }
