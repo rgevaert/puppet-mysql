@@ -21,7 +21,9 @@ class mysql::config
       owner   => root,
       group   => root,
       mode    => 644,
-      source  => [ "puppet:///modules/mysql/my.cnf-${hostname}", "puppet:///modules/mysql/my.cnf-${type}" ],
+      source  => [ "puppet:///modules/mysql/my.cnf-${type}" ],
+      # we only install a config file if the package doesn't install one
+      replace => false,
       notify  => Class["mysql::service"];
     "/etc/mysql/debian.cnf":
       ensure  => present,
@@ -34,5 +36,17 @@ class mysql::config
       group   => root,
       mode    => 755,
       source  => $mysql::params::initscript;
+  }
+
+  define param($section, $param=$name, $value)
+  {
+    augeas { "${section}_${param}":
+      context => "/files/etc/mysql/my.cnf",
+      changes => [
+          "set target[ . = '${section}'] ${section}",
+          "set target[ . = '${section}']/${param} ${value}",
+        ],
+      require => File['/etc/mysql/my.cnf'],
+    }
   }
 }

@@ -1,5 +1,5 @@
 name    'rgevaert-mysql'
-version '0.0.2'
+version '0.0.3'
 source 'https://github.com/rgevaert/puppet-mysql'
 author 'rgevaert'
 license 'GPL v3 or later'
