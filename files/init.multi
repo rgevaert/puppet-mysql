@@ -15,7 +15,7 @@ case "${1:-''}" in
     echo
     ;;
 
-  'report' )
+  'report'|'status')
     mysqld_multi report $2
     ;;
 
@@ -25,7 +25,7 @@ case "${1:-''}" in
     ;;
 
   *)
-    echo "Usage: $SELF start|stop|restart"
+    echo "Usage: $SELF start|stop|restart|report|status"
     exit 1
     ;;
 esac

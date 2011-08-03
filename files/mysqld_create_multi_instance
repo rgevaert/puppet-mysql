@@ -1,0 +1,115 @@
+#!/usr/bin/perl
+
+# Copyright (C) 2011  Rudy Gevaert <rudy@webworm.org>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License as published by the Free Software Foundation; version 3
+# of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Library General Public License for more details.
+#
+# You should have received a copy of the GNU Library General Public
+# License along with this library; if not, write to the Free
+# Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
+# MA 02111-1307, USA
+
+use Getopt::Long;
+use strict;
+
+our $opt_password   = undef;
+our $opt_socket;    
+our $opt_bind_address;
+our $opt_port;
+our $opt_pid_file;
+our $opt_datadir;
+our $opt_tmpdir;
+our $opt_verbose   = 0;
+
+my $basedir       = "/usr";
+my $my_progname  = $0;
+
+main();
+
+####
+#### main sub routine
+####
+
+sub main
+{
+  my $r =  GetOptions( "socket=s", "bind_address=s", "pid_file=s", "datadir=s", "tmpdir=s",
+                  "verbose","port=i", "password=s");
+  if(!$r)
+  {
+    print "Error with an option. See source ${my_progname}.\n";
+    exit(1);
+  }
+
+  if(!install_db())
+  {
+    print "Error when calling mysql_install_db.\n";
+    exit(1);
+  }
+
+  if(!set_multipass())
+  {
+    print "Error when setting multi user password.\n";
+    exit(1);
+  }
+}
+
+sub install_db
+{
+  my $command = "/usr/bin/mysql_install_db --datadir=${opt_datadir} --user=mysql";
+  print "$command\n";
+  system($command);
+  my $r = $? >> 8;
+  if ($r)
+  {
+    print "Error installing initial mysql database files\n";
+    return 0;
+  }else
+  {
+    return 1;
+  }
+}
+
+sub set_multipass
+{
+  my $command = "/usr/bin/nohup /usr/sbin/mysqld --user=mysql --socket=${opt_socket} --pid-file=${opt_pid_file} --datadir=${opt_datadir} --tmpdir=${opt_tmpdir} --basedir=${basedir} --bind-address=${opt_bind_address} --port=${opt_port} --skip-networking > /var/tmp/nohup.out &";
+  print "$command\n";
+  system($command);
+  my $r = $? >> 8;
+  if ($r)
+  {
+    print "Error starting empty mysql database\n";
+    return 0;
+  }
+
+  system("/bin/sleep 10");
+
+  $command = "/usr/bin/mysql -u root --password=\"\" -S ${opt_socket} -e \"GRANT SHUTDOWN ON *.* TO 'multi_admin'\@'localhost' IDENTIFIED BY '${opt_password}';\"";
+  print "$command\n";
+  system($command);
+  my $r = $? >> 8;
+  if ($r)
+  {
+    print "Error setting multi_admin password\n";
+    return 0;
+  }
+
+  $command = "/usr/bin/mysqladmin -S ${opt_socket} -u multi_admin --password='${opt_password}' shutdown";
+  print "$command\n";
+  system($command);
+  my $r = $? >> 8;
+  if ($r)
+  {
+    print "Error shutting down mysql database\n";
+    return 0;
+  }
+  system("/bin/sleep 10");
+  return 1;
+}
