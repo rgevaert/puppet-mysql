@@ -1,12 +1,32 @@
 class mysql::service
 {
-  service {
-    $mysql::params::service:
-      enable     => true,
-      ensure     => running,
-      hasrestart => true,
-      hasstatus  => true,
-  }
+  if($multi)
+  {
+    notice("${multi}")
+    define multi($ensure='running')
+    {
+      $GNR = regsubst($name,'^mysqld(\d+)$','\1')
+      service {
+        "${name}" :
+          ensure     => "${ensure}",
+          hasrestart => true,
+          hasstatus  => true,
+          start      => "/etc/init.d/mysql start ${GNR}",
+          restart    => "/etc/init.d/mysql restart ${GNR}",
+          stop       => "/etc/init.d/mysql stop ${GNR}",
+          status     => "/usr/bin/test -S /var/run/mysqld/${name}.sock",
+          require    => Class['mysql::config'];
+      }
+    }
+  }else
+  {
+    service {
+      $mysql::params::service:
+        enable     => true,
+        ensure     => running,
+        hasrestart => true,
+        hasstatus  => true,
+    }
 
   $mysql_password = $mysql::params::password
 
@@ -29,5 +49,5 @@ class mysql::service
       require => Exec["Set MySQL server root password"],
       replace => false,
   }
-
+  }
 }
