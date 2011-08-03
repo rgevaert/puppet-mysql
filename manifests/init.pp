@@ -23,10 +23,12 @@ class mysql ( $type='oracle')
   include mysql::install
   include mysql::config
   include mysql::service
+  include mysql::functions
 
   Class['params'] ->
-    Class['repo'] ->
-    Class['install'] ->
-    Class['config'] ->
-    Class['service']
+  Class['repo'] ->
+  Class['install'] ->
+  Class['config'] ->
+  Class['service'] ->
+  Class['functions']
 }
