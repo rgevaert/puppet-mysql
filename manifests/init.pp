@@ -22,11 +22,19 @@ class mysql ( $type='oracle', $multi=false)
   include mysql::repo
   include mysql::install
   include mysql::config
-  include mysql::service
 
   Class['params'] ->
     Class['repo'] ->
     Class['install'] ->
-    Class['config'] ->
-    Class['service']
+    Class['config']
+
+  if($multi)
+  {
+    include mysql::multi
+    Class['config'] -> Class['multi']
+  }else
+  {
+    include mysql::service
+    Class['config'] -> Class['service']
+  }
 }

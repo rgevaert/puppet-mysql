@@ -34,4 +34,9 @@ class mysql::params
     true   => 'puppet:///modules/mysql/init.multi',
     false =>  undef,
   }
+
+  $service_class = $multi ? {
+      true   => Class['mysql::multi'],
+      false  => Class["mysql::service"]
+  }
 }

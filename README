@@ -1,0 +1,41 @@
+This module manages MySQL.  It gives you the choice MySQL
+server you want to use: Oracle, MariaDB or Percona
+
+Parameters, first one is the default:
+- type : oracle|mariadb|percona
+- multi: false|true
+
+Requires: camptocamp/apt rgevaert/pwgen
+
+Sample Usages:
+
+1) Install mariadb MySQL server:
+
+  class {
+    'mysql':
+      type => 'mariadb';
+  }
+
+2) Install Oracle MySQL that come with the Debian
+   repositories.  Setup multiple MySQL instance with
+   MySQLd_multi.
+
+  class {
+    'mysql':
+      multi => true;
+  }
+
+  mysql::multi::instance{
+    'mysqld1':
+      bind_address => '0.0.0.0',
+      port         => 3307;
+    'mysqld2':
+      bind_address => '0.0.0.0',
+      port         => 3308;
+    'mysqld3':
+      bind_address => '0.0.0.0',
+      port         => 3309,
+      ensure       => 'stopped';
+  }
+
+3) Change a setting in your MySQL configuration:
