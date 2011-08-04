@@ -6,13 +6,11 @@ case "${1:-''}" in
   'start')
     log_daemon_msg "Starting MySQL Multi " "mysqld_multi $2" 
     mysqld_multi start $2
-    echo
     ;;
 
   'stop')
     log_daemon_msg "Stopping MySQL Multi" "mysqld_multi $2"
     mysqld_multi stop $2
-    echo
     ;;
 
   'report'|'status')
