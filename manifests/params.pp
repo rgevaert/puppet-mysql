@@ -30,13 +30,13 @@ class mysql::params
     default                => 'multipass',
   }
   
-  $initscript = $multi ? {
+  $initscript = $mysql::multi ? {
     true   => 'puppet:///modules/mysql/init.multi',
     false =>  undef,
   }
 
-  $service_class = $multi ? {
-      true   => Class['mysql::multi'],
-      false  => Class["mysql::service"]
+  $notify_services = $fqdn ? {
+    'myhost1.example.com'     => false,
+    default                   => true 
   }
 }

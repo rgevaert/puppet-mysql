@@ -36,6 +36,7 @@ class mysql::multi
   }
 
   define instance( $bind_address,
+                $groupnr,
                 $port         = 3306,
                 $socket       = "/var/run/mysqld/${name}.sock",
                 $pid_file     = "/var/run/mysqld/${name}.pid",
@@ -44,30 +45,31 @@ class mysql::multi
                 $ensure       = "running"
               )
   {
-    if($name !~ /^mysqld(\d)+$/)
+    if($groupnr !~ /^([1-9])+$/)
     {
-      error("name must by like mysqld[x], where x is a number.")
+      error("groupnr must be a postive integer.")
     }
+    $instance = "mysqld${groupnr}"
 
-    augeas { "${name}":
+    augeas { "${instance}":
       context => "/files/etc/mysql/my.cnf",
       changes => [
-          "set target[ . = '$name'] $name",
-          "set target[ . = '$name']/bind-address $bind_address",
-          "set target[ . = '$name']/socket $socket",
-          "set target[ . = '$name']/port $port",
-          "set target[ . = '$name']/pid-file $pid_file",
-          "set target[ . = '$name']/datadir $datadir",
-          "set target[ . = '$name']/tmpdir $tmpdir",
+          "set target[ . = '$instance'] $instance",
+          "set target[ . = '$instance']/bind-address $bind_address",
+          "set target[ . = '$instance']/socket $socket",
+          "set target[ . = '$instance']/port $port",
+          "set target[ . = '$instance']/pid-file $pid_file",
+          "set target[ . = '$instance']/datadir $datadir",
+          "set target[ . = '$instance']/tmpdir $tmpdir",
         ],
       require => Augeas['mysqld_multi'],
-      notify  => Service["${name}"],
+      notify  => Service["${instance}"],
     }
 
     exec {
-      "setup_multi_${name}":
+      "setup_multi_${instance}":
         command  => "/usr/sbin/mysqld_create_multi_instance --socket ${socket} --datadir ${datadir} --port ${port} --pid_file ${pid_file} --tmpdir ${tmpdir} --bind_address ${bind_address} --password ${mysql::params::multi_password}",
-        require => Augeas["${name}"],
+        require => Augeas["${instance}"],
         unless   => "/usr/bin/test -d ${datadir}";
     }
 
@@ -79,16 +81,15 @@ class mysql::multi
         mode    => 755;
     }
 
-    $GNR = regsubst($name,'^mysqld(\d+)$','\1')
     service {
-      "${name}" :
+      "${instance}" :
         ensure     => "${ensure}",
         hasrestart => true,
         hasstatus  => true,
-        start      => "/etc/init.d/mysql start ${GNR}",
-        restart    => "/etc/init.d/mysql restart ${GNR}",
-        stop       => "/etc/init.d/mysql stop ${GNR}",
-        status     => "/usr/bin/test -S /var/run/mysqld/${name}.sock",
+        start      => "/etc/init.d/mysql start ${groupnr}",
+        restart    => "/etc/init.d/mysql restart ${groupnr}",
+        stop       => "/etc/init.d/mysql stop ${groupnr}",
+        status     => "/usr/bin/test -S ${socket}",
         require    => Augeas['mysqld_multi'];
     }
   }

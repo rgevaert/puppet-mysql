@@ -40,8 +40,22 @@ class mysql::config
           "set target[ . = '${section}'] ${section}",
           "set target[ . = '${section}']/${param} ${value}",
         ],
-      require => File['/etc/mysql/my.cnf'],
-      notify  => $service_class;
+      require => File['/etc/mysql/my.cnf']
+    }
+  
+    if($mysql::params::notify_services)
+    {
+      notice("notifying $section $mysql::params::notify_services")
+      if($mysql::multi)
+      {
+        if($section =~ /^mysqld([1-9])+$/)
+        {
+          Augeas["${section}_${param}"] ~> Service[$section]
+        }
+      }else
+      {
+        Augeas["${section}_${param}"] ~> Class['mysql::service']
+      }
     }
   }
 }
