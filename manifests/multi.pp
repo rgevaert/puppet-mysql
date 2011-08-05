@@ -32,7 +32,7 @@ class mysql::multi
         "set target[ . = 'mysqld_multi']/user multi_admin",
         "set target[ . = 'mysqld_multi']/password ${mysql::params::multi_password}",
       ],
-    require => [File['/etc/mysql/my.cnf'],File['/usr/sbin/mysqld_create_multi_instance']],
+    require => [File['/etc/mysql/my.cnf'],File['/usr/sbin/mysqld_create_multi_instance'],File['/etc/init.d/mysql']],
   }
 
   define instance( $bind_address,
@@ -72,6 +72,30 @@ class mysql::multi
         require => Augeas["${instance}"],
         unless   => "/usr/bin/test -d ${datadir}";
     }
+
+    $mysql_password = $mysql::params::password
+
+    # Is only run if the mysql server doesn't have a password.
+    exec { "Set MySQL server root password ${name}":
+        path        => "/bin:/usr/bin",
+        # Only set password I no password is set.
+        onlyif      => "mysqladmin -u root --password='' -S ${socket} status",
+        command     => "mysqladmin -u root --password='' -S ${socket} password $mysql_password",
+        require     => Service["${instance}"],
+        notify      => File["/root/.my.cnf-${name}"],
+    }
+
+    file { "/root/.my.cnf-${name}":
+        ensure => present,
+        owner   => root,
+        group   => root,
+        mode    => 600,
+        content => template ("mysql/root-my.cnf.erb"),
+        require => Exec["Set MySQL server root password ${name}"],
+        replace => false,
+    }
+
+
 
     file {
       "${tmpdir}":

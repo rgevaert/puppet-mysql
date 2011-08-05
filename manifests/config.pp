@@ -45,7 +45,6 @@ class mysql::config
   
     if($mysql::params::notify_services)
     {
-      notice("notifying $section $mysql::params::notify_services")
       if($mysql::multi)
       {
         if($section =~ /^mysqld([1-9])+$/)
