@@ -19,7 +19,7 @@ class mysql::multi
       owner   => root,
       group   => root,
       mode    => 755,
-      source  => "puppet:///modules/mysql/mysqld_create_multi_instance";
+      source  => "${mysql::params::create_instance_script}";
   }
 
   augeas { "mysqld_multi":

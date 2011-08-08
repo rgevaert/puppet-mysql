@@ -35,6 +35,13 @@ class mysql::params
     false =>  undef,
   }
 
+  if($mysql::multi){
+    $create_instance_script = $fqdn ? {
+      'myhost1.example.com'    => "puppet:///modules/mysql/create_instance.example.com",
+      default                  => "puppet:///modules/mysql/create_instance",
+    }
+  }
+
   $notify_services = $fqdn ? {
     'myhost1.example.com'     => false,
     default                   => true 
