@@ -38,4 +38,17 @@ Sample Usages:
       ensure       => 'stopped';
   }
 
-3) Change a setting in your MySQL configuration:
+3) Change a setting in your MySQL configuration.  
+
+  mysql::config::param {
+    'bind-address':
+      section => 'mysqld',
+      value   => '0.0.0.0';
+  }
+
+  mysql::config::param {
+    'bind-address1':
+      section => 'mysqld1',
+      param   => 'bind-address',
+      value   => '0.0.0.0';
+  }

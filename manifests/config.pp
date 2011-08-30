@@ -32,7 +32,7 @@ class mysql::config
       mode    => 600;
   }
 
-  define param($section, $param, $value)
+  define param($section, $param=$name, $value)
   {
     augeas { "${section}_${param}":
       context => "/files/etc/mysql/my.cnf",
