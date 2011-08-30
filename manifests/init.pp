@@ -35,6 +35,7 @@ class mysql ( $type='oracle', $multi=false)
   }else
   {
     include mysql::service
-    Class['config'] -> Class['service']
+    include mysql::functions
+    Class['config'] -> Class['service'] -> Class['functions']
   }
 }
