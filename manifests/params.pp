@@ -20,11 +20,6 @@ class mysql::params
     'mariadb' => [ 'mysql' ],
   } 
 
-  $password = $fqdn ? {
-    'myhost1.example.com'  => 'test123',
-    default                => pwgen(),
-  }
-
   $multi_password = $fqdn ? {
     'myhost1.example.com'  => 'test123',
     default                => 'multipass',

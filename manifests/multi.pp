@@ -42,7 +42,6 @@ class mysql::multi
                 $pid_file     = "/var/run/mysqld/${name}.pid",
                 $datadir      = "/var/lib/${name}",
                 $tmpdir       = "/var/tmp/${name}",
-                $dotmycnf     = "/root/.my.cnf-${name}",
                 $ensure       = "running"
               )
   {
@@ -74,27 +73,8 @@ class mysql::multi
         unless   => "/usr/bin/test -d ${datadir}";
     }
 
-    $mysql_password = $mysql::params::password
-
-    # Is only run if the mysql server doesn't have a password.
-    exec { "Set MySQL server root password ${name}":
-        path        => "/bin:/usr/bin",
-        # Only set password I no password is set.
-        onlyif      => "mysqladmin -u root --password='' -S ${socket} status",
-        command     => "/usr/sbin/secure_mysql ${socket} $mysql_password",
-        refreshonly => true,
-    }
 
     file {
-      "${dotmycnf}":
-        ensure => present,
-        owner   => root,
-        group   => root,
-        mode    => 600,
-        content => template ("mysql/root-my.cnf.erb"),
-        notify  => Exec["Set MySQL server root password ${name}"],
-        require => Service["${instance}"],
-        replace => false;
       "${tmpdir}":
         ensure  => directory,
         owner   => mysql,
