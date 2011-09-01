@@ -13,6 +13,6 @@ class mysql::install
       ensure => present,
       owner  => root,
       mode   => 755,
-      source => puppet:///modules/mysql/secure_mysql;
+      source => "puppet:///modules/mysql/secure_mysql";
   }
 }
