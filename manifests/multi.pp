@@ -81,7 +81,7 @@ class mysql::multi
         path        => "/bin:/usr/bin",
         # Only set password I no password is set.
         onlyif      => "mysqladmin -u root --password='' -S ${socket} status",
-        command     => "mysqladmin -u root --password='' -S ${socket} password $mysql_password",
+        command     => "/usr/sbin/secure_mysql ${socket} $mysql_password",
         require     => Service["${instance}"],
         notify      => File["${dotmycnf}"],
     }

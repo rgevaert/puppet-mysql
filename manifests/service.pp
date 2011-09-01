@@ -15,7 +15,7 @@ class mysql::service
       path        => "/bin:/usr/bin",
       # Only set password I no password is set.
       onlyif      => "mysqladmin --no-defaults -u root status",
-      command     => "mysqladmin -u root password $mysql_password",
+      command     => "/usr/sbin/secure_mysql /var/run/mysqld/mysqld.sock $mysql_password",
       require     => Service[$mysql::params::service],
       notify      => File['/root/.my.cnf'],
   }

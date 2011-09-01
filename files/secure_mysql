@@ -28,7 +28,8 @@ fi
 SOCKET=$1
 PASSWORD=$2
 
-mysql -S $SOCKET -u root -p'' <<EOF
+# Connect to socket with empty password.
+mysql -S $SOCKET -u root  <<EOF
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${PASSWORD}');
 SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('${PASSWORD}');
 SET PASSWORD FOR 'root'@'${HOSTNAME}' = PASSWORD('${PASSWORD}');
