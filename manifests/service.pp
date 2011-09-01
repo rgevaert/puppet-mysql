@@ -16,8 +16,7 @@ class mysql::service
       # Only set password I no password is set.
       onlyif      => "mysqladmin --no-defaults -u root status",
       command     => "/usr/sbin/secure_mysql /var/run/mysqld/mysqld.sock $mysql_password",
-      require     => Service[$mysql::params::service],
-      notify      => File['/root/.my.cnf'],
+      refreshonly => true,
   }
 
   file { "/root/.my.cnf":
@@ -26,7 +25,8 @@ class mysql::service
       group   => root,
       mode    => 600,
       content => template ("mysql/root-my.cnf.erb"),
-      require => Exec["Set MySQL server root password"],
+      require => Service["$mysql::params::service"],
+      notify  => Exec["Set MySQL server root password"],
       replace => false,
   }
 }

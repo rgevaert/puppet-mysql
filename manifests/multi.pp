@@ -82,8 +82,7 @@ class mysql::multi
         # Only set password I no password is set.
         onlyif      => "mysqladmin -u root --password='' -S ${socket} status",
         command     => "/usr/sbin/secure_mysql ${socket} $mysql_password",
-        require     => Service["${instance}"],
-        notify      => File["${dotmycnf}"],
+        refreshonly => true,
     }
 
     file {
@@ -93,7 +92,8 @@ class mysql::multi
         group   => root,
         mode    => 600,
         content => template ("mysql/root-my.cnf.erb"),
-        require => Exec["Set MySQL server root password ${name}"],
+        notify  => Exec["Set MySQL server root password ${name}"],
+        require => Service["${instance}"],
         replace => false;
       "${tmpdir}":
         ensure  => directory,
