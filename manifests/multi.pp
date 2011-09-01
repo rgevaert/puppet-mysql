@@ -88,7 +88,7 @@ class mysql::multi
 
     file {
       "${dotmycnf}":
-        ensure  => present,
+        ensure => present,
         owner   => root,
         group   => root,
         mode    => 600,
