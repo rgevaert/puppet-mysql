@@ -42,6 +42,7 @@ class mysql::multi
                 $pid_file     = "/var/run/mysqld/${name}.pid",
                 $datadir      = "/var/lib/${name}",
                 $tmpdir       = "/var/tmp/${name}",
+                $dotmycnf     = "/root/.my.cnf-${name}",
                 $ensure       = "running"
               )
   {
@@ -82,10 +83,12 @@ class mysql::multi
         onlyif      => "mysqladmin -u root --password='' -S ${socket} status",
         command     => "mysqladmin -u root --password='' -S ${socket} password $mysql_password",
         require     => Service["${instance}"],
-        notify      => File["/root/.my.cnf-${name}"],
+        notify      => File["dotmycnf"],
     }
 
-    file { "/root/.my.cnf-${name}":
+    file {
+      "dotmycnf"
+        path    => "${dotmycnf}"
         ensure => present,
         owner   => root,
         group   => root,
@@ -93,11 +96,6 @@ class mysql::multi
         content => template ("mysql/root-my.cnf.erb"),
         require => Exec["Set MySQL server root password ${name}"],
         replace => false,
-    }
-
-
-
-    file {
       "${tmpdir}":
         ensure  => directory,
         owner   => mysql,
