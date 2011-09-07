@@ -38,7 +38,7 @@ class mysql::functions
     exec { "MySQL: create user $name":
       command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf --execute=\"GRANT ALL PRIVILEGES ON ${database}.* TO '${name}'@'${host}' IDENTIFIED BY '${password}' WITH GRANT OPTION;\";",
       require => Class["mysql::install"],
-      unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf mysql --execute=\"SELECT * FROM user where User = '${name}';\"",
+      unless  => "mysql --user=${name} --password=${password} --database=${database} --host=${host}",
     }
   }
 
