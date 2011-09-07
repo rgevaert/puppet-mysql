@@ -37,12 +37,30 @@ class mysql::multi
 
   define instance( $bind_address,
                 $groupnr,
-                $port         = 3306,
-                $socket       = "/var/run/mysqld/${name}.sock",
-                $pid_file     = "/var/run/mysqld/${name}.pid",
-                $datadir      = "/var/lib/${name}",
-                $tmpdir       = "/var/tmp/${name}",
-                $ensure       = "running"
+                $port                     = 3306,
+                $socket                   = "/var/run/mysqld/${name}.sock",
+                $pid_file                 = "/var/run/mysqld/${name}.pid",
+                $datadir                  = "/var/lib/${name}",
+                $tmpdir                   = "/var/tmp/${name}",
+                $ensure                   = "running",
+                $server_id                = 1,
+                $log_bin                  = "${datadir}/${name}-bin",
+                $expire_logs_days         = 10, 
+                $max_binlog_size          = "100M",
+                $log_slave_updates        = "true",
+                $auto_increment_increment = 1,
+                $auto_increment_offset    = 1,
+                $key_buffer               = "16M",
+                $max_allowed_packet       = "16M",
+                $thread_stack             = "192K",
+                $thread_cache_size        = "8",
+                $max_connections          = 100,
+                $table_cache              = 64,
+                $thread_concurrency       = 10,
+
+
+
+              
               )
   {
     if($groupnr !~ /^([1-9])+$/)
@@ -61,6 +79,20 @@ class mysql::multi
           "set target[ . = '$instance']/pid-file $pid_file",
           "set target[ . = '$instance']/datadir $datadir",
           "set target[ . = '$instance']/tmpdir $tmpdir",
+          "set target[ . = '$instance']/server_id $server_id ",
+          "set target[ . = '$instance']/log_bin $log_bin ",
+          "set target[ . = '$instance']/expire_logs_days $expire_logs_days",
+          "set target[ . = '$instance']/max_binlog_size $max_binlog_size",
+          "set target[ . = '$instance']/log_slave_updates $log_slave_updates ",
+          "set target[ . = '$instance']/auto_increment_increment $auto_increment_increment",
+          "set target[ . = '$instance']/auto_increment_offset $auto_increment_offset ",
+          "set target[ . = '$instance']/key_buffer $key_buffer",
+          "set target[ . = '$instance']/max_allowed_packet $max_allowed_packet",
+          "set target[ . = '$instance']/thread_stack $thread_stack",
+          "set target[ . = '$instance']/thread_cache_size $thread_cache_size",
+          "set target[ . = '$instance']/max_connections $max_connections",
+          "set target[ . = '$instance']/table_cache $table_cache",
+          "set target[ . = '$instance']/thread_concurrency $thread_concurrency",
         ],
       require => Augeas['mysqld_multi'],
       notify  => Service["${instance}"],
