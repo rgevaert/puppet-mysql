@@ -44,7 +44,10 @@ class mysql::multi
                 $tmpdir                   = "/var/tmp/${name}",
                 $ensure                   = "running",
                 $server_id                = 1,
-                $log_bin                  = "${datadir}/${name}-bin",
+                $log_bin                  = "${name}-bin",
+                $log_bin_index            = "${name}-bin.index",
+                $relay_log                = "${name}-relay-bin",
+                $relay_log_index          = "${name}-relay-bin.index",
                 $expire_logs_days         = 10, 
                 $max_binlog_size          = "100M",
                 $log_slave_updates        = "true",
@@ -56,11 +59,7 @@ class mysql::multi
                 $thread_cache_size        = "8",
                 $max_connections          = 100,
                 $table_cache              = 64,
-                $thread_concurrency       = 10,
-
-
-
-              
+                $thread_concurrency       = 10
               )
   {
     if($groupnr !~ /^([1-9])+$/)
@@ -81,6 +80,9 @@ class mysql::multi
           "set target[ . = '$instance']/tmpdir $tmpdir",
           "set target[ . = '$instance']/server_id $server_id ",
           "set target[ . = '$instance']/log_bin $log_bin ",
+          "set target[ . = '$instance']/log_bin_index $log_bin_index",
+          "set target[ . = '$instance']/relay_log $relay_log",
+          "set target[ . = '$instance']/relay_log_index $relay_log_index",
           "set target[ . = '$instance']/expire_logs_days $expire_logs_days",
           "set target[ . = '$instance']/max_binlog_size $max_binlog_size",
           "set target[ . = '$instance']/log_slave_updates $log_slave_updates ",
