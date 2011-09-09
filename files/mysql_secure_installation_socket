@@ -43,7 +43,7 @@ prepare() {
 do_query() {
     echo "$1" >$command
     #sed 's,^,> ,' < $command  # Debugging
-    mysql -S $socket --defaults-file=$config <$command
+    mysql --defaults-file=$config <$command
     return $?
 }
 
@@ -73,7 +73,8 @@ make_config() {
     echo "user=root" >>$config
     esc_pass=`basic_single_escape "$rootpass"`
     echo "password='$esc_pass'" >>$config
-    #sed 's,^,> ,' < $config  # Debugging
+    echo "socket=${socket}" >>$config
+    sed 's,^,> ,' < $config  # Debugging
 }
 
 get_root_password() {
