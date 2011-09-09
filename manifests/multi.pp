@@ -59,7 +59,8 @@ class mysql::multi
                 $thread_cache_size        = "8",
                 $max_connections          = 100,
                 $table_cache              = 64,
-                $thread_concurrency       = 10
+                $thread_concurrency       = 10,
+                $max_connect_errors       = 10
               )
   {
     if($groupnr !~ /^([1-9])+$/)
@@ -95,6 +96,7 @@ class mysql::multi
           "set target[ . = '$instance']/max_connections $max_connections",
           "set target[ . = '$instance']/table_cache $table_cache",
           "set target[ . = '$instance']/thread_concurrency $thread_concurrency",
+          "set target[ . = '$instance']/max_connect_errors $max_connect_errors",
         ],
       require => Augeas['mysqld_multi'],
       notify  => Service["${instance}"],
