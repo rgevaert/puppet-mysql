@@ -74,7 +74,7 @@ make_config() {
     esc_pass=`basic_single_escape "$rootpass"`
     echo "password='$esc_pass'" >>$config
     echo "socket=${socket}" >>$config
-    sed 's,^,> ,' < $config  # Debugging
+    #sed 's,^,> ,' < $config  # Debugging
 }
 
 get_root_password() {
