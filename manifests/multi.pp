@@ -63,7 +63,7 @@ class mysql::multi
                 $max_connect_errors       = 10
               )
   {
-    if($groupnr !~ /^([1-9])+$/)
+    if($groupnr !~ /^([0-9])+$/)
     {
       error("groupnr must be a postive integer.")
     }
