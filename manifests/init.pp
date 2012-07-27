@@ -28,6 +28,16 @@ class mysql ( $type                           = 'oracle',
   include mysql::install
   include mysql::config
 
+  if versioncmp($::augeasversion, '0.10.0') < 0 {
+    # https://projects.puppetlabs.com/issues/11414
+    fail('augeasversion must at least be 0.10.0')
+  }
+
+  if versioncmp($::puppetversion, '2.7.10') < 0 {
+    # https://projects.puppetlabs.com/issues/11414
+    fail('augeasversion must at least be 2.7.10')
+  }
+
   Class['params'] ->
     Class['repo'] ->
     Class['install'] ->
