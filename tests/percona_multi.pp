@@ -3,7 +3,8 @@ node default
   include repos
   class {
     'mysql':
-      type => 'percona';
+      multi => true,
+      type  => 'percona';
   }
 
   mysql::multi::instance{

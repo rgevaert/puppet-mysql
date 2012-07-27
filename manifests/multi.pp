@@ -63,6 +63,12 @@ class mysql::multi
                 $max_connect_errors       = 10
               )
   {
+
+    if(!$mysql::multi)
+    {
+      fail('mysql::multi parameter must be true when defining an instance.')
+    }
+
     if($groupnr !~ /^([0-9])+$/)
     {
       fail("groupnr must be a postive integer.")

@@ -4,7 +4,8 @@ node default
 
   class {
     'mysql':
-      type => 'mariadb';
+      multi => true,
+      type  => 'mariadb';
   }
 
   mysql::multi::instance{
