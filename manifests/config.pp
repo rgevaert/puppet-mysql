@@ -21,7 +21,7 @@ class mysql::config
       owner   => root,
       group   => root,
       mode    => 644,
-      source  => [ "puppet:///modules/mysql/my.cnf-${type}" ],
+      source  => [ "puppet:///modules/mysql/my.cnf-${mysql::type}" ],
       # we only install a config file if the package doesn't install one
       replace => false,
       notify  => $service_class;
