@@ -43,7 +43,7 @@ class mysql::config
       require => File['/etc/mysql/my.cnf']
     }
   
-    if($mysql::params::notify_services)
+    if($mysql::notify_services)
     {
       if($mysql::multi)
       {

@@ -13,13 +13,13 @@ class mysql::multi
       owner   => root,
       group   => root,
       mode    => 755,
-      source  => $mysql::params::initscript;
+      source  => $mysql::multi_initscript;
     "/usr/sbin/mysqld_create_multi_instance":
       ensure  => present,
       owner   => root,
       group   => root,
       mode    => 755,
-      source  => "${mysql::params::create_instance_script}";
+      source  => "${mysql::multi_create_instance_script}";
   }
 
   augeas { "mysqld_multi":
@@ -30,7 +30,7 @@ class mysql::multi
         "set target[ . = 'mysqld_multi']/mysqladmin /usr/bin/mysqladmin",
         "set target[ . = 'mysqld_multi']/log /var/log/mysql/mysqld_multi.log",
         "set target[ . = 'mysqld_multi']/user multi_admin",
-        "set target[ . = 'mysqld_multi']/password ${mysql::params::multi_password}",
+        "set target[ . = 'mysqld_multi']/password ${mysql::multi_password}",
       ],
     require => [File['/etc/mysql/my.cnf'],File['/usr/sbin/mysqld_create_multi_instance'],File['/etc/init.d/mysql']],
   }
@@ -65,7 +65,7 @@ class mysql::multi
   {
     if($groupnr !~ /^([0-9])+$/)
     {
-      error("groupnr must be a postive integer.")
+      fail("groupnr must be a postive integer.")
     }
     $instance = "mysqld${groupnr}"
 
@@ -104,7 +104,7 @@ class mysql::multi
 
     exec {
       "setup_multi_${instance}":
-        command  => "/usr/sbin/mysqld_create_multi_instance --socket ${socket} --datadir ${datadir} --port ${port} --pid_file ${pid_file} --tmpdir ${tmpdir} --bind_address ${bind_address} --password ${mysql::params::multi_password}",
+        command  => "/usr/sbin/mysqld_create_multi_instance --socket ${socket} --datadir ${datadir} --port ${port} --pid_file ${pid_file} --tmpdir ${tmpdir} --bind_address ${bind_address} --password ${mysql::multi_password}",
         require => Augeas["${instance}"],
         unless   => "/usr/bin/test -d ${datadir}";
     }

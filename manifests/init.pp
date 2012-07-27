@@ -16,7 +16,12 @@
 #    type => mariadb
 # }
 #
-class mysql ( $type='oracle', $multi=false)
+class mysql ( $type                           = 'oracle',
+              $notify_services                = true,
+              $multi                          = false,
+              $multi_password                 = 'multipass',
+              $multi_initscript               = 'puppet:///modules/mysql/init.multi',
+              $multi_create_instance_script   = 'puppet:///modules/mysql/create_instance')
 {
   include mysql::params
   include mysql::repo
