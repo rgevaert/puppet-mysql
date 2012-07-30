@@ -1,0 +1,13 @@
+1.0.0
+-----
+
+* The following variables have been removed from params.pp.  They
+  were changed into class variables:
+    notify_services
+    multi_password
+    multi_initscript (was initscript)
+    multi_create_instance_script (was create_instance_script)
+
+  Check if the defaults are still sane for your environment.
+
+* Fix some dynamic lookup variables.
