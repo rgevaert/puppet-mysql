@@ -26,7 +26,7 @@ class mysql ( $type                           = 'oracle',
 inherits mysql::params {
 
   class{'mysql::repo':;} ->
-  class{'mysql::install':;} ->
+  class{'mysql::install':;}
 
   if versioncmp($::augeasversion, '0.10.0') < 0 {
     # https://projects.puppetlabs.com/issues/11414
