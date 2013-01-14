@@ -1,5 +1,7 @@
 class mysql::params
 {
+  $package_ensure = installed
+
   $packages = $mysql::type ? {
     'oracle'  => [ 'mysql-server-5.1' ],
     'percona' => [ 'percona-server-server-5.5' ],

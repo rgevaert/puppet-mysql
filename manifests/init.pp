@@ -21,9 +21,10 @@ class mysql ( $type                           = 'oracle',
               $multi                          = false,
               $multi_password                 = 'multipass',
               $multi_initscript               = 'puppet:///modules/mysql/init.multi',
-              $multi_create_instance_script   = 'puppet:///modules/mysql/create_instance')
-{
-  include mysql::params
+              $multi_create_instance_script   = 'puppet:///modules/mysql/create_instance',
+              $package_ensure                 = $mysql::params::package_ensure)
+inherits mysql::params {
+
   include mysql::repo
   include mysql::install
   include mysql::config
@@ -38,10 +39,9 @@ class mysql ( $type                           = 'oracle',
     fail('augeasversion must at least be 2.7.10')
   }
 
-  Class['params'] ->
-    Class['repo'] ->
-    Class['install'] ->
-    Class['config']
+  Class['repo'] ->
+  Class['install'] ->
+  Class['config']
 
   if($multi)
   {
