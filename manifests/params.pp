@@ -15,7 +15,7 @@ class mysql::params
   $packages_extra_mariadb = [ 'maatkit']
 
   $service_oracle  = [ 'mysql' ]
-  $service_oracle  = [ 'mysql' ]
+  $service_percona = [ 'mysql' ]
   $service_mariadb = [ 'mysql' ]
 
 }
