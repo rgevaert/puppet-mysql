@@ -59,8 +59,7 @@ inherits mysql::params {
   if($multi)
   {
     class{'mysql::multi':;} ->
-    class{'mysql::config':;} ->
-    class{'mysql::multi':;}
+    class{'mysql::config':;}
   }
   else
   {
