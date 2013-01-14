@@ -64,8 +64,6 @@ inherits mysql::params {
   }
   else
   {
-    class{'mysql::service':;}->
-    class{'mysql::functions':;}->
     class{'mysql::config':;}->
     class{'mysql::service':;}->
     class{'mysql::functions':;}
