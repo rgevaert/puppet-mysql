@@ -25,9 +25,8 @@ class mysql ( $type                           = 'oracle',
               $package_ensure                 = $mysql::params::package_ensure)
 inherits mysql::params {
 
-  include mysql::repo
-  include mysql::install
-  include mysql::config
+  class{'mysql::repo':;} ->
+  class{'mysql::install':;} ->
 
   if versioncmp($::augeasversion, '0.10.0') < 0 {
     # https://projects.puppetlabs.com/issues/11414
@@ -39,18 +38,18 @@ inherits mysql::params {
     fail('augeasversion must at least be 2.7.10')
   }
 
-  Class['repo'] ->
-  Class['install'] ->
-  Class['config']
-
   if($multi)
   {
-    include mysql::multi
-    Class['config'] -> Class['multi']
-  }else
+    class{'mysql::multi':;} ->
+    class{'mysql::config':;} ->
+    class{'mysql::multi':;}
+  }
+  else
   {
-    include mysql::service
-    include mysql::functions
-    Class['config'] -> Class['service'] -> Class['functions']
+    class{'mysql::service':;}->
+    class{'mysql::functions':;}->
+    class{'mysql::config':;}->
+    class{'mysql::service':;}->
+    class{'mysql::functions':;}
   }
 }
