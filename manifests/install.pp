@@ -1,9 +1,9 @@
 class mysql::install
 {
   package {
-    $mysql::params::packages:
+    $mysql::packages:
      ensure => $mysql::package_ensure;
-    $mysql::params::packages_extra:
+    $mysql::packages_extra:
      ensure => $mysql::package_ensure;
   }
 

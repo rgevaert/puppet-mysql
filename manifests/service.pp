@@ -1,7 +1,7 @@
 class mysql::service
 {
   service {
-    $mysql::params::service:
+    $mysql::service:
       enable     => true,
       ensure     => running,
       hasrestart => true,

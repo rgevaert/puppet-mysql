@@ -16,7 +16,7 @@
 #    type => mariadb
 # }
 #
-class mysql ( $type                           = 'oracle',
+class mysql ( $type                           = $mysql::params::type,
               $notify_services                = true,
               $multi                          = false,
               $multi_password                 = 'multipass',
@@ -24,6 +24,23 @@ class mysql ( $type                           = 'oracle',
               $multi_create_instance_script   = 'puppet:///modules/mysql/create_instance',
               $package_ensure                 = $mysql::params::package_ensure)
 inherits mysql::params {
+
+  $packages = $mysql::type ? {
+    'oracle'  => $mysql::params::package_oracle,
+    'percona' => $mysql::params::package_percona,
+    'mariadb' => $mysql::params::package_mariadb,
+  } 
+ 
+  $packages_extra = $mysql::type ? {
+    'oracle'  => $mysql::params::packages_extra_oracle,
+    'percona' => $mysql::params::packages_extra_percona,
+    'mariadb' => $mysql::params::packages_extra_mariadb,
+  } 
+
+  $service = $mysql::type ? {
+    'oracle'  => $mysql::params::service_oracle,
+    'percona' => $mysql::params::service_percona,
+    'mariadb' => $mysql::params::service_mariadb,
 
   class{'mysql::repo':;} ->
   class{'mysql::install':;}
