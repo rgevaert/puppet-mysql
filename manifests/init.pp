@@ -41,6 +41,7 @@ inherits mysql::params {
     'oracle'  => $mysql::params::service_oracle,
     'percona' => $mysql::params::service_percona,
     'mariadb' => $mysql::params::service_mariadb,
+  }
 
   class{'mysql::repo':;} ->
   class{'mysql::install':;}
