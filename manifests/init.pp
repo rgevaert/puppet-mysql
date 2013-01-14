@@ -26,9 +26,9 @@ class mysql ( $type                           = $mysql::params::type,
 inherits mysql::params {
 
   $packages = $mysql::type ? {
-    'oracle'  => $mysql::params::package_oracle,
-    'percona' => $mysql::params::package_percona,
-    'mariadb' => $mysql::params::package_mariadb,
+    'oracle'  => $mysql::params::packages_oracle,
+    'percona' => $mysql::params::packages_percona,
+    'mariadb' => $mysql::params::packages_mariadb,
   } 
  
   $packages_extra = $mysql::type ? {
