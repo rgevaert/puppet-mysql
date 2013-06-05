@@ -6,7 +6,7 @@ class mysql::params
 
   $package_ensure = installed
 
-  $packages_oracle  = [ 'mysql-server-5.1' ]
+  $packages_oracle  = [ 'mysql-server' ]
   $packages_percona = [ 'percona-server-server-5.5' ]
   $packages_mariadb = [ 'mariadb-server-5.3' ]
 
