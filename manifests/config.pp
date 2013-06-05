@@ -30,6 +30,7 @@ class mysql::config
       owner   => root,
       group   => root,
       mode    => 600;
+    require => mysql::packages
   }
 
   define param($section, $param=$name, $value)
