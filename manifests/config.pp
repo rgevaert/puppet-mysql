@@ -1,5 +1,7 @@
 class mysql::config
 {
+  require => mysql::packages
+  
   file {
     "/etc/mysql/":
       ensure  => directory,
@@ -15,8 +17,7 @@ class mysql::config
       ensure  => directory,
       owner   => mysql,
       group   => mysql,
-      mode    => 755,
-      require => mysql::packages
+      mode    => 755;
     "/etc/mysql/my.cnf":
       ensure  => present,
       owner   => root,
