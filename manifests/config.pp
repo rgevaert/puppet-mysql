@@ -1,7 +1,5 @@
 class mysql::config
 {
-  require => mysql::packages
-  
   file {
     "/etc/mysql/":
       ensure  => directory,
@@ -32,6 +30,7 @@ class mysql::config
       owner   => root,
       group   => root,
       mode    => 600;
+    require => mysql::packages;
   }
 
   define param($section, $param=$name, $value)
