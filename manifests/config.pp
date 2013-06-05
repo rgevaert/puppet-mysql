@@ -15,7 +15,8 @@ class mysql::config
       ensure  => directory,
       owner   => mysql,
       group   => mysql,
-      mode    => 755;
+      mode    => 755,
+      require => mysql::packages
     "/etc/mysql/my.cnf":
       ensure  => present,
       owner   => root,
@@ -30,7 +31,6 @@ class mysql::config
       owner   => root,
       group   => root,
       mode    => 600;
-    require => mysql::packages
   }
 
   define param($section, $param=$name, $value)
