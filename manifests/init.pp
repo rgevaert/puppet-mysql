@@ -44,7 +44,8 @@ inherits mysql::params {
   }
 
   class{'mysql::repo':;} ->
-  class{'mysql::install':;}
+  class{'mysql::install':;} ->
+  class{'mysql::config':;}
 
   if versioncmp($::augeasversion, '0.10.0') < 0 {
     # https://projects.puppetlabs.com/issues/11414
