@@ -16,7 +16,7 @@ class mysql::config
       owner   => mysql,
       group   => mysql,
       mode    => 755,
-      require => $mysql::packages;
+      require => Package[$mysql::packages];
     "/etc/mysql/my.cnf":
       ensure  => present,
       owner   => root,
