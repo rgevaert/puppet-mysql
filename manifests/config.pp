@@ -1,49 +1,49 @@
 class mysql::config
 {
   file {
-    "/etc/mysql/":
+    '/etc/mysql/':
       ensure  => directory,
-      owner   => root,
-      group   => root,
-      mode    => 755;
-    "/etc/mysql/conf.d/":
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755';
+    '/etc/mysql/conf.d/':
       ensure  => directory,
-      owner   => root,
-      group   => root,
-      mode    => 755;
-    "/var/lib/mysql":
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755';
+    '/var/lib/mysql':
       ensure  => directory,
-      owner   => mysql,
-      group   => mysql,
-      mode    => 755,
+      owner   => 'mysql',
+      group   => 'mysql',
+      mode    => '0755',
       require => Package[$mysql::packages];
-    "/etc/mysql/my.cnf":
+    '/etc/mysql/my.cnf':
       ensure  => present,
-      owner   => root,
-      group   => root,
-      mode    => 644,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
       source  => [ "puppet:///modules/mysql/my.cnf-${mysql::type}" ],
       # we only install a config file if the package doesn't install one
       replace => false,
-      notify  => $service_class;
-    "/etc/mysql/debian.cnf":
+      notify  => $mysql::service;
+    '/etc/mysql/debian.cnf':
       ensure  => present,
-      owner   => root,
-      group   => root,
-      mode    => 600;
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600';
   }
 
-  define param($section, $param=$name, $value)
+  define param($section, $value, $param=$name)
   {
     augeas { "${section}_${param}":
-      context => "/files/etc/mysql/my.cnf",
+      context => '/files/etc/mysql/my.cnf',
       changes => [
           "set target[ . = '${section}'] ${section}",
           "set target[ . = '${section}']/${param} ${value}",
         ],
       require => File['/etc/mysql/my.cnf']
     }
-  
+
     if($mysql::notify_services)
     {
       if($mysql::multi)

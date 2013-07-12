@@ -29,13 +29,13 @@ inherits mysql::params {
     'oracle'  => $mysql::params::packages_oracle,
     'percona' => $mysql::params::packages_percona,
     'mariadb' => $mysql::params::packages_mariadb,
-  } 
- 
+  }
+
   $packages_extra = $mysql::type ? {
     'oracle'  => $mysql::params::packages_extra_oracle,
     'percona' => $mysql::params::packages_extra_percona,
     'mariadb' => $mysql::params::packages_extra_mariadb,
-  } 
+  }
 
   $service = $mysql::type ? {
     'oracle'  => $mysql::params::service_oracle,
