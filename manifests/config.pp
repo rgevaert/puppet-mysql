@@ -25,7 +25,6 @@ class mysql::config
       source  => [ "puppet:///modules/mysql/my.cnf-${mysql::type}" ],
       # we only install a config file if the package doesn't install one
       replace => false,
-      notify  => $mysql::service;
     '/etc/mysql/debian.cnf':
       ensure  => present,
       owner   => 'root',
