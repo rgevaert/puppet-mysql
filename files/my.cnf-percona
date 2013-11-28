@@ -30,6 +30,8 @@ socket		= /var/run/mysqld/mysqld.sock
 [mysqld_safe]
 socket		= /var/run/mysqld/mysqld.sock
 nice		= 0
+numa_interleave = 1
+malloc-lib      = /usr/lib/x86_64-linux-gnu/libjemalloc.so.1
 
 [mysqld]
 #
