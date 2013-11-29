@@ -60,7 +60,8 @@ class mysql::multi
                 $max_connections          = 100,
                 $table_cache              = 64,
                 $thread_concurrency       = 10,
-                $max_connect_errors       = 10
+                $max_connect_errors       = 10,
+                $innodb_log_file_size      = 5242880,
               )
   {
 
@@ -102,6 +103,7 @@ class mysql::multi
           "set target[ . = '${instance}']/max_connections ${max_connections}",
           "set target[ . = '${instance}']/thread_concurrency ${thread_concurrency}",
           "set target[ . = '${instance}']/max_connect_errors ${max_connect_errors}",
+          "set target[ . = '${instance}']/innodb_log_file_size ${innodb_log_file_size}",
         ],
       require => Augeas['mysqld_multi'],
       notify  => Service[$instance],
