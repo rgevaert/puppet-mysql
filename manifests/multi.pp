@@ -100,12 +100,38 @@ class mysql::multi
           "set target[ . = '${instance}']/thread_stack ${thread_stack}",
           "set target[ . = '${instance}']/thread_cache_size ${thread_cache_size}",
           "set target[ . = '${instance}']/max_connections ${max_connections}",
-          "set target[ . = '${instance}']/table_cache ${table_cache}",
           "set target[ . = '${instance}']/thread_concurrency ${thread_concurrency}",
           "set target[ . = '${instance}']/max_connect_errors ${max_connect_errors}",
         ],
       require => Augeas['mysqld_multi'],
       notify  => Service[$instance],
+    }
+
+    # Vanaf percona server 5.5: table_cache vervangen door table_open_cache en table_definition_cache
+    # Link naar docs toevoegen
+
+    if ( $table_open_cache ) and ( $table_definition_cache ) {
+
+      augeas { "${instance}-tablecachenew":
+        context => '/files/etc/mysql/my.cnf',
+        changes => [
+          "set target[ . = '${instance}']/table_open_cache ${table_open_cache}",
+          "set target[ . = '${instance}']/table_definition_cache ${table_definition_cache}",
+        ],
+        require => Augeas['mysqld_multi'],
+        notify  => Service[$instance],
+      }
+
+    }
+    else {
+      augeas { "${instance}-tablecache":
+        context => '/files/etc/mysql/my.cnf',
+        changes => [
+          "set target[ . = '${instance}']/table_cache ${table_cache}",
+        ],
+        require => Augeas['mysqld_multi'],
+        notify  => Service[$instance],
+      }
     }
 
     exec {
@@ -114,7 +140,6 @@ class mysql::multi
         require  => Augeas[$instance],
         unless   => "/usr/bin/test -d ${datadir}";
     }
-
 
     file {
       $tmpdir:
