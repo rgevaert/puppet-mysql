@@ -76,44 +76,67 @@ class mysql::multi
     }
     $instance = "mysqld${groupnr}"
 
-    $base_augeas_changes = [
-      "set target[ . = '${instance}'] ${instance}",
-      "set target[ . = '${instance}']/bind-address ${bind_address}",
-      "set target[ . = '${instance}']/socket ${socket}",
-      "set target[ . = '${instance}']/port ${port}",
-      "set target[ . = '${instance}']/pid-file ${pid_file}",
-      "set target[ . = '${instance}']/datadir ${datadir}",
-      "set target[ . = '${instance}']/tmpdir ${tmpdir}",
-      "set target[ . = '${instance}']/server_id ${server_id} ",
-      "set target[ . = '${instance}']/log_bin ${log_bin} ",
-      "set target[ . = '${instance}']/log_bin_index ${log_bin_index}",
-      "set target[ . = '${instance}']/relay_log ${relay_log}",
-      "set target[ . = '${instance}']/relay_log_index ${relay_log_index}",
-      "set target[ . = '${instance}']/expire_logs_days ${expire_logs_days}",
-      "set target[ . = '${instance}']/max_binlog_size ${max_binlog_size}",
-      "set target[ . = '${instance}']/log_slave_updates ${log_slave_updates} ",
-      "set target[ . = '${instance}']/auto_increment_increment ${auto_increment_increment}",
-      "set target[ . = '${instance}']/auto_increment_offset ${auto_increment_offset} ",
-      "set target[ . = '${instance}']/key_buffer ${key_buffer}",
-      "set target[ . = '${instance}']/max_allowed_packet ${max_allowed_packet}",
-      "set target[ . = '${instance}']/thread_stack ${thread_stack}",
-      "set target[ . = '${instance}']/thread_cache_size ${thread_cache_size}",
-      "set target[ . = '${instance}']/max_connections ${max_connections}",
-      "set target[ . = '${instance}']/thread_concurrency ${thread_concurrency}",
-      "set target[ . = '${instance}']/max_connect_errors ${max_connect_errors}",
-    ]
-
     if $innodb_log_file_size < 0 {
-      $real_augeas_changes = $base_augeas_changes
+      $_augeas_changes = [
+        "set target[ . = '${instance}'] ${instance}",
+        "set target[ . = '${instance}']/bind-address ${bind_address}",
+        "set target[ . = '${instance}']/socket ${socket}",
+        "set target[ . = '${instance}']/port ${port}",
+        "set target[ . = '${instance}']/pid-file ${pid_file}",
+        "set target[ . = '${instance}']/datadir ${datadir}",
+        "set target[ . = '${instance}']/tmpdir ${tmpdir}",
+        "set target[ . = '${instance}']/server_id ${server_id} ",
+        "set target[ . = '${instance}']/log_bin ${log_bin} ",
+        "set target[ . = '${instance}']/log_bin_index ${log_bin_index}",
+        "set target[ . = '${instance}']/relay_log ${relay_log}",
+        "set target[ . = '${instance}']/relay_log_index ${relay_log_index}",
+        "set target[ . = '${instance}']/expire_logs_days ${expire_logs_days}",
+        "set target[ . = '${instance}']/max_binlog_size ${max_binlog_size}",
+        "set target[ . = '${instance}']/log_slave_updates ${log_slave_updates} ",
+        "set target[ . = '${instance}']/auto_increment_increment ${auto_increment_increment}",
+        "set target[ . = '${instance}']/auto_increment_offset ${auto_increment_offset} ",
+        "set target[ . = '${instance}']/key_buffer ${key_buffer}",
+        "set target[ . = '${instance}']/max_allowed_packet ${max_allowed_packet}",
+        "set target[ . = '${instance}']/thread_stack ${thread_stack}",
+        "set target[ . = '${instance}']/thread_cache_size ${thread_cache_size}",
+        "set target[ . = '${instance}']/max_connections ${max_connections}",
+        "set target[ . = '${instance}']/thread_concurrency ${thread_concurrency}",
+        "set target[ . = '${instance}']/max_connect_errors ${max_connect_errors}",
+      ]
     }
     else {
-      $real_augeas_changes = concat($base_augeas_changes,
-        "set target[ . = '${instance}']/innodb_log_file_size ${innodb_log_file_size}")
+      $_augeas_changes = [
+        "set target[ . = '${instance}'] ${instance}",
+        "set target[ . = '${instance}']/bind-address ${bind_address}",
+        "set target[ . = '${instance}']/socket ${socket}",
+        "set target[ . = '${instance}']/port ${port}",
+        "set target[ . = '${instance}']/pid-file ${pid_file}",
+        "set target[ . = '${instance}']/datadir ${datadir}",
+        "set target[ . = '${instance}']/tmpdir ${tmpdir}",
+        "set target[ . = '${instance}']/server_id ${server_id} ",
+        "set target[ . = '${instance}']/log_bin ${log_bin} ",
+        "set target[ . = '${instance}']/log_bin_index ${log_bin_index}",
+        "set target[ . = '${instance}']/relay_log ${relay_log}",
+        "set target[ . = '${instance}']/relay_log_index ${relay_log_index}",
+        "set target[ . = '${instance}']/expire_logs_days ${expire_logs_days}",
+        "set target[ . = '${instance}']/max_binlog_size ${max_binlog_size}",
+        "set target[ . = '${instance}']/log_slave_updates ${log_slave_updates} ",
+        "set target[ . = '${instance}']/auto_increment_increment ${auto_increment_increment}",
+        "set target[ . = '${instance}']/auto_increment_offset ${auto_increment_offset} ",
+        "set target[ . = '${instance}']/key_buffer ${key_buffer}",
+        "set target[ . = '${instance}']/max_allowed_packet ${max_allowed_packet}",
+        "set target[ . = '${instance}']/thread_stack ${thread_stack}",
+        "set target[ . = '${instance}']/thread_cache_size ${thread_cache_size}",
+        "set target[ . = '${instance}']/max_connections ${max_connections}",
+        "set target[ . = '${instance}']/thread_concurrency ${thread_concurrency}",
+        "set target[ . = '${instance}']/max_connect_errors ${max_connect_errors}",
+        "set target[ . = '${instance}']/innodb_log_file_size ${innodb_log_file_size}",
+      ]
     }
 
     augeas { $instance:
       context => '/files/etc/mysql/my.cnf',
-      changes => $real_augeas_changes,
+      changes => $_augeas_changes,
       require => Augeas['mysqld_multi'],
       notify  => Service[$instance],
     }
