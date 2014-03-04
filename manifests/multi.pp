@@ -59,6 +59,8 @@ class mysql::multi
                 $thread_cache_size        = '8',
                 $max_connections          = 100,
                 $table_cache              = 64,
+                $table_open_cache         = 64,
+                $table_definition_cache   = 256,
                 $thread_concurrency       = 10,
                 $max_connect_errors       = 10,
                 $innodb_log_file_size     = 5242880,
