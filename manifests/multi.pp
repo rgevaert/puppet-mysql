@@ -138,16 +138,16 @@ class mysql::multi
       }
     }
 
-    if $innodb_log_file_size >= 0 {
-      augeas { "${instance}-innodb_log_file_size":
-        context => '/files/etc/mysql/my.cnf',
-        changes => [
-          "set target[ . = '${instance}']/innodb_log_file_size ${innodb_log_file_size}",
-        ],
-        require => Augeas['mysqld_multi'],
-        notify  => Service[$instance],
-      }
-    }
+#    if $innodb_log_file_size >= 0 {
+#      augeas { "${instance}-innodb_log_file_size":
+#        context => '/files/etc/mysql/my.cnf',
+#        changes => [
+#          "set target[ . = '${instance}']/innodb_log_file_size ${innodb_log_file_size}",
+#        ],
+#        require => Augeas['mysqld_multi'],
+#        notify  => Service[$instance],
+#      }
+#    }
 
     if $innodb_file_per_table {
       augeas { "${instance}-innodb_file_per_table":
