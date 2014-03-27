@@ -63,7 +63,7 @@ class mysql::multi
                 $table_definition_cache   = false,
                 $thread_concurrency       = 10,
                 $max_connect_errors       = 10,
-                $innodb_log_file_size     = 5242880,
+                #$innodb_log_file_size     = 5242880,
                 $innodb_file_per_table    = false,
               )
   {
