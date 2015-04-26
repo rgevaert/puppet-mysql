@@ -7,8 +7,8 @@ class mysql::params
   $package_ensure = installed
 
   $maatkit_package = $::lsbdistcodename ? {
-    'wheezy' => 'percona-toolkit',
-    default  => 'maatkit'
+    'squeeze' => 'maatkit',
+    default  => 'percona-toolkit'
   }
 
   $packages_oracle  = [ 'mysql-server' ]
