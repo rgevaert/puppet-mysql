@@ -4,6 +4,7 @@ server you want to use: Oracle, MariaDB or Percona
 Parameters, first one is the default:
 - type : oracle|mariadb|percona
 - multi: false|true
+- manage_repo: do not manage repo config
 
 Requires: camptocamp/apt rgevaert/pwgen
 

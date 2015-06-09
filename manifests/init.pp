@@ -22,7 +22,8 @@ class mysql ( $type                           = $mysql::params::type,
               $multi_password                 = 'multipass',
               $multi_initscript               = 'puppet:///modules/mysql/init.multi',
               $multi_create_instance_script   = 'puppet:///modules/mysql/create_instance',
-              $package_ensure                 = $mysql::params::package_ensure)
+              $package_ensure                 = $mysql::params::package_ensure,
+              $manage_repo                    = true)
 inherits mysql::params {
 
   $packages = $mysql::type ? {
@@ -43,8 +44,13 @@ inherits mysql::params {
     'mariadb' => $mysql::params::service_mariadb,
   }
 
-  class{'mysql::repo':;} ->
-  class{'mysql::install':;}
+  if($manage_repo)
+  {
+    class{'mysql::repo':;} ->
+    class{'mysql::install':;}
+  } else {
+    class{'mysql::install':;}
+  }
 
   if versioncmp($::augeasversion, '0.10.0') < 0 {
     # https://projects.puppetlabs.com/issues/11414
