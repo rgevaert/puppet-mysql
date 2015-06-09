@@ -23,7 +23,7 @@ class mysql ( $type                           = $mysql::params::type,
               $multi_initscript               = 'puppet:///modules/mysql/init.multi',
               $multi_create_instance_script   = 'puppet:///modules/mysql/create_instance',
               $package_ensure                 = $mysql::params::package_ensure,
-              $manage_repo                    = true
+              $manage_repo                    = true,
               $packages                       = '')
 inherits mysql::params {
 
