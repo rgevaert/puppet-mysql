@@ -1,3 +1,4 @@
+# Configure mysql directories and config files
 class mysql::config
 {
   file {
@@ -30,31 +31,5 @@ class mysql::config
       owner   => 'root',
       group   => 'root',
       mode    => '0600';
-  }
-
-  define param($section, $value, $param=$name)
-  {
-    augeas { "${section}_${param}":
-      context => '/files/etc/mysql/my.cnf',
-      changes => [
-          "set target[ . = '${section}'] ${section}",
-          "set target[ . = '${section}']/${param} ${value}",
-        ],
-      require => File['/etc/mysql/my.cnf']
-    }
-
-    if($mysql::notify_services)
-    {
-      if($mysql::multi)
-      {
-        if($section =~ /^mysqld([1-9])+$/)
-        {
-          Augeas["${section}_${param}"] ~> Service[$section]
-        }
-      }else
-      {
-        Augeas["${section}_${param}"] ~> Class['mysql::service']
-      }
-    }
   }
 }
