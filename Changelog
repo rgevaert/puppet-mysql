@@ -1,3 +1,9 @@
+2.0.0
+-----
+
+* Support overriding certain settings like $packages, $manage_repo
+* By default version 5.5 of mysql is installed
+
 1.0.0
 -----
 
