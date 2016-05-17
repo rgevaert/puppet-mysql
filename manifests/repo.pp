@@ -5,7 +5,7 @@ class mysql::repo
 {
   include apt
 
-  case $mysql::mysql_type{
+  case $mysql::type{
     'oracle' : { # use standard packages
     }
 

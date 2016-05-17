@@ -23,7 +23,7 @@ class mysql::config
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      source  => [ "puppet:///modules/mysql/my.cnf-${mysql::mysql_type}" ],
+      source  => [ "puppet:///modules/mysql/my.cnf-${mysql::type}" ],
       # we only install a config file if the package doesn't install one
       replace => false;
     '/etc/mysql/debian.cnf':

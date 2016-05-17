@@ -5,9 +5,9 @@ class mysql::install
 {
   package {
     $mysql::_packages:
-      ensure => $mysql::package_ensure_real;
+      ensure => $mysql::package_ensure;
     $mysql::packages_extra:
-      ensure => $mysql::package_ensure_real;
+      ensure => $mysql::package_ensure;
   }
 
   file {
