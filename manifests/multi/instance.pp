@@ -1,7 +1,7 @@
 # Class: mysql::multi::intance
 #
 # This class configures a new instances in a multi instance setup
-class mysql::multi::instance ( $bind_address,
+define mysql::multi::instance ( $bind_address,
               $groupnr,
               $port                     = 3306,
               $socket                   = "/var/run/mysqld/${name}.sock",
