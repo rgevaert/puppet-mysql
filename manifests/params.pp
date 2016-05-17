@@ -1,3 +1,6 @@
+# Class: mysql::params
+#
+# This class holds the default params for the module
 class mysql::params
 {
 
