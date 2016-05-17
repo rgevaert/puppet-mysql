@@ -1,10 +1,13 @@
+# Class: mysql::install
+#
+# This class will install your MySQL server package
 class mysql::install
 {
   package {
     $mysql::_packages:
-      ensure => $mysql::package_ensure;
+      ensure => $mysql::package_ensure_real;
     $mysql::packages_extra:
-      ensure => $mysql::package_ensure;
+      ensure => $mysql::package_ensure_real;
   }
 
   file {

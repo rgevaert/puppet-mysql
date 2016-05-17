@@ -16,19 +16,30 @@
 #    type => mariadb
 # }
 #
-class mysql ( $type                           = $mysql::params::type,
+class mysql ( $type                           = 'UNSET',
               $notify_services                = true,
               $multi                          = false,
               $multi_password                 = 'multipass',
               $multi_initscript               = 'puppet:///modules/mysql/init.multi',
               $multi_create_instance_script   = 'puppet:///modules/mysql/create_instance',
-              $package_ensure                 = $mysql::params::package_ensure,
+              $package_ensure                 = 'UNSET',
               $manage_repo                    = true,
               $packages                       = '')
-inherits mysql::params {
+{
+  include mysql::params
+
+  $mysql_type = $type ? {
+    'UNSET' => $::mysql::params::type,
+    default => $type,
+  }
+
+  $package_ensure_real = $package_ensure ? {
+    'UNSET' => $::mysql::params::package_ensure,
+    default => $package_ensure,
+  }
 
   $_packages = $packages ? {
-    ''      => $mysql::type ? {
+    ''      => $mysql::mysql_type ? {
       'oracle'  => $mysql::params::packages_oracle,
       'percona' => $mysql::params::packages_percona,
       'mariadb' => $mysql::params::packages_mariadb,
@@ -36,13 +47,13 @@ inherits mysql::params {
     default => $packages
   }
 
-  $packages_extra = $mysql::type ? {
+  $packages_extra = $mysql::mysql_type ? {
     'oracle'  => $mysql::params::packages_extra_oracle,
     'percona' => $mysql::params::packages_extra_percona,
     'mariadb' => $mysql::params::packages_extra_mariadb,
   }
 
-  $service = $mysql::type ? {
+  $service = $mysql::mysql_type ? {
     'oracle'  => $mysql::params::service_oracle,
     'percona' => $mysql::params::service_percona,
     'mariadb' => $mysql::params::service_mariadb,
