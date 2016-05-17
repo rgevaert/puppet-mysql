@@ -1,6 +1,9 @@
+# Class: mysql::repo
+#
+# This class configures the APT repo for the chosen flavour of MySQL
 class mysql::repo
 {
-  include apt
+  include ::apt
 
   case $mysql::type{
     'oracle' : { # use standard packages

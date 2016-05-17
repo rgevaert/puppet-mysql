@@ -50,10 +50,10 @@ inherits mysql::params {
 
   if($manage_repo)
   {
-    class{'mysql::repo':;} ->
-    class{'mysql::install':;}
+    class{'::mysql::repo':;} ->
+    class{'::mysql::install':;}
   } else {
-    class{'mysql::install':;}
+    class{'::mysql::install':;}
   }
 
   if versioncmp($::augeasversion, '0.10.0') < 0 {
@@ -68,13 +68,13 @@ inherits mysql::params {
 
   if($multi)
   {
-    class{'mysql::multi':;}
-    class{'mysql::config':;}
+    class{'::mysql::multi':;}
+    class{'::mysql::config':;}
   }
   else
   {
-    class{'mysql::config':;}->
-    class{'mysql::service':;}->
-    class{'mysql::functions':;}
+    class{'::mysql::config':;}->
+    class{'::mysql::service':;}->
+    class{'::mysql::functions':;}
   }
 }

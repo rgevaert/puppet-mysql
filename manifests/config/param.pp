@@ -14,7 +14,7 @@ define mysql::config::param($section, $value, $param=$name)
         "set target[ . = '${section}'] ${section}",
         "set target[ . = '${section}']/${param} ${value}",
       ],
-    require => File['/etc/mysql/my.cnf']
+    require => File['/etc/mysql/my.cnf'],
   }
 
   if($mysql::notify_services)

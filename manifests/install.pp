@@ -1,3 +1,6 @@
+# Class: mysql::install
+#
+# This class will install your MySQL server package
 class mysql::install
 {
   package {
