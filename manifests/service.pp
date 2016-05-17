@@ -1,3 +1,6 @@
+# Class: mysql::service
+#
+# This class provides the MySQL service
 class mysql::service
 {
   service {
