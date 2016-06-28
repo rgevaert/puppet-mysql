@@ -2,6 +2,7 @@
 # are sent to graphite
 define mysql::monitoring::graphite_cron(
   $mysql_host,
+  $ensure     = present,
   $mysql_user = undef,
   $mysql_pass = undef,
   $mysql_port = undef,
@@ -52,6 +53,7 @@ define mysql::monitoring::graphite_cron(
   }
 
   cron { "graphite monitoring ${mysql_host}" :
+    ensure  => $ensure,
     command => "/usr/local/bin/graphite_mysql_sender.php ${param_host} ${param_user} ${param_pass} ${param_port} ${param_graphite_host} ${param_graphite_port} ${param_graphite_key}",
     user    => 'root',
     hour    => '*',
